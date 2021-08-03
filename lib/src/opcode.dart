@@ -22,12 +22,12 @@ class Opcode {
     if (value == 0x00EE) return Instructions.op00EE;
     if (i == 0x2) return Instructions.op2NNN;
 
-    throw Exception('Unknown instruction: $this');
+    throw Exception('Unknown instruction: ${intTo16Bit(value)}');
   }
 
   Opcode.decode(this.value);
 
   @override
   String toString() =>
-      'Opcode{${instructionToName(instruction)}, 0x${value.toRadixString(16).padLeft(4, '0').toUpperCase()}}';
+      'Opcode{${instructionToName(instruction)}, ${intTo16Bit(value)}}';
 }
