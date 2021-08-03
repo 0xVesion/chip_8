@@ -21,6 +21,10 @@ class Opcode {
     if (i == 0xD) return Instructions.opDXYN;
     if (value == 0x00EE) return Instructions.op00EE;
     if (i == 0x2) return Instructions.op2NNN;
+    if (i == 0x3) return Instructions.op3XNN;
+    if (i == 0x4) return Instructions.op4XNN;
+    if (i == 0x5) return Instructions.op5XY0;
+    if (i == 0x9) return Instructions.op9XY0;
 
     throw Exception('Unknown instruction: ${intTo16Bit(value)}');
   }

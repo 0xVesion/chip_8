@@ -7,4 +7,8 @@ enum Instructions {
   opDXYN,
   op00EE,
   op2NNN,
+  op3XNN,
+  op4XNN,
+  op5XY0,
+  op9XY0,
 }

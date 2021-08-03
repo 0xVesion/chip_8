@@ -74,9 +74,15 @@ class Chip8 {
     final a = ram[pc];
     final b = ram[pc + 1];
 
-    pc += 2;
+    skip();
 
     return (a << 8) + b;
+  }
+
+  void skip() => pc += 2;
+
+  void skipIf(bool shouldSkip) {
+    if (shouldSkip) skip();
   }
 
   void execute(Opcode op) {
@@ -89,8 +95,15 @@ class Chip8 {
       Instructions.opDXYN: () => draw(op),
       Instructions.op00EE: () => returnRoutine(),
       Instructions.op2NNN: () => callRoutine(op),
+      Instructions.op3XNN: () => skipIfVXEqNN(op),
+      Instructions.op4XNN: () => skipIfVXNotNN(op),
+      Instructions.op5XY0: () => skipIfVXEqVY(op),
+      Instructions.op9XY0: () => skipIfVXNotVY(op),
     }[op.instruction]!();
   }
+
+  // do nothing
+  void nop([Opcode? op]) {}
 
   // return from a subroutine
   void returnRoutine() {
@@ -154,5 +167,25 @@ class Chip8 {
         if (x == Display.width) break;
       }
     }
+  }
+
+  // skip instruction if VX == NN
+  void skipIfVXEqNN(Opcode op) {
+    skipIf(V[op.x] == op.nn);
+  }
+
+  // skip instruction if VX != NN
+  void skipIfVXNotNN(Opcode op) {
+    skipIf(V[op.x] != op.nn);
+  }
+
+  // skip instruction if VX == VY
+  void skipIfVXEqVY(Opcode op) {
+    skipIf(V[op.x] == V[op.y]);
+  }
+
+  // skip instruction if VX != VY
+  void skipIfVXNotVY(Opcode op) {
+    skipIf(V[op.x] != V[op.y]);
   }
 }
