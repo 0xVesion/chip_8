@@ -29,7 +29,7 @@ class DebugMod extends Mod {
 
   void drawScreen(Chip8 chip8, Opcode op) {
     // do nothing if screen hasn't changed
-    if (op.instruction != 0xD) return;
+    if (op.instruction != Instructions.opDXYN) return;
 
     for (final row in chip8.display.data) {
       for (final pixel in row) {
