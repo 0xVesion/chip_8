@@ -82,19 +82,34 @@ class Chip8 {
   void execute(Opcode op) {
     if (op.value == 0x00E0) {
       op00E0();
-    } else if (op.instruction == 1) {
+    } else if (op.instruction == 0x1) {
       op1NNN(op);
-    } else if (op.instruction == 6) {
+    } else if (op.instruction == 0x6) {
       op6XNN(op);
-    } else if (op.instruction == 7) {
+    } else if (op.instruction == 0x7) {
       op7XNN(op);
     } else if (op.instruction == 0xA) {
       opANNN(op);
     } else if (op.instruction == 0xD) {
       opDXYN(op);
+    } else if (op.value == 0x00EE) {
+      op00EE();
+    } else if (op.instruction == 0x2) {
+      op00EE();
     } else {
       throw Exception('Unknown opcode: $op');
     }
+  }
+
+  // return from a subroutine
+  void op00EE() {
+    pc = stack.pop();
+  }
+
+  // call subroutine at NNN
+  void op2NNN(Opcode op) {
+    stack.push(pc);
+    op1NNN(op);
   }
 
   void op00E0() {
