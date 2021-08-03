@@ -80,62 +80,41 @@ class Chip8 {
   }
 
   void execute(Opcode op) {
-    // 0x00E0
     if (op.value == 0x00E0) {
-      clearDisplay();
-    }
-
-    // 0x1NNN
-    else if (op.instruction == 1) {
-      jump(op);
-    }
-
-    // 0x6XNN
-    else if (op.instruction == 6) {
-      setRegister(op);
-    }
-
-    // 0x7XNN
-    else if (op.instruction == 7) {
-      addToRegister(op);
-    }
-
-    // 0xANNN
-    else if (op.instruction == 0xA) {
-      setIndex(op);
-    }
-
-    // 0xDXYN
-    else if (op.instruction == 0xD) {
-      draw(op);
-    }
-
-    // 0x0000
-    else if (op.value == 0) {
-      exit(1);
+      op00E0();
+    } else if (op.instruction == 1) {
+      op1NNN(op);
+    } else if (op.instruction == 6) {
+      op6XNN(op);
+    } else if (op.instruction == 7) {
+      op7XNN(op);
+    } else if (op.instruction == 0xA) {
+      opANNN(op);
+    } else if (op.instruction == 0xD) {
+      opDXYN(op);
     } else {
       throw Exception('Unknown opcode: $op');
     }
   }
 
-  void clearDisplay() {
+  void op00E0() {
     display.clear();
   }
 
   // jump to NNN
-  void jump(Opcode op) => pc = op.nnn;
+  void op1NNN(Opcode op) => pc = op.nnn;
 
   // set register VX to NN
-  void setRegister(Opcode op) => v[op.x] = op.nn;
+  void op6XNN(Opcode op) => v[op.x] = op.nn;
 
   // add NN to register VX
-  void addToRegister(Opcode op) => v[op.x] += op.nn;
+  void op7XNN(Opcode op) => v[op.x] += op.nn;
 
   // set index register to NNN
-  void setIndex(Opcode op) => ir = op.nnn;
+  void opANNN(Opcode op) => ir = op.nnn;
 
   // draw sprite at position VX, VY with height N
-  void draw(Opcode op) {
+  void opDXYN(Opcode op) {
     // reset VF to 0
     v[0xF] = 0;
 
